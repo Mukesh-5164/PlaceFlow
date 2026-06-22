@@ -7,6 +7,7 @@ import {
 } from '../api/dsaApi'
 import Modal from '../components/Modal'
 import Loader from '../components/Loader'
+import { Code2, Brain, Edit2, Trash2, CheckCircle, RefreshCw, Hourglass } from 'lucide-react'
 
 const EMPTY_FORM = {
   topicName: '',
@@ -106,7 +107,7 @@ function DsaTracker() {
     <div className="page-container">
       <div className="page-header">
         <div>
-          <h1 className="page-title">DSA Tracker 💻</h1>
+          <h1 className="page-title flex items-center gap-2">DSA Tracker <Code2 size={28} className="inline ml-2 text-primary" /></h1>
           <p className="page-subtitle">
             Track your Data Structures &amp; Algorithms progress
             {topics.length > 0 && (
@@ -127,7 +128,7 @@ function DsaTracker() {
         <Loader message="Loading topics..." />
       ) : topics.length === 0 ? (
         <div className="empty-state" style={{ marginTop: '48px' }}>
-          <div className="empty-state-icon">🧠</div>
+          <div className="empty-state-icon"><Brain size={48} /></div>
           <div className="empty-state-text">No topics yet.<br />Start adding DSA topics to track your progress!</div>
         </div>
       ) : (
@@ -149,13 +150,13 @@ function DsaTracker() {
                     onClick={() => openEdit(topic)}
                     title="Edit"
                     aria-label={`Edit ${topic.topicName}`}
-                  >✏️</button>
+                  ><Edit2 size={16} /></button>
                   <button
                     className="btn-icon danger"
                     onClick={() => handleDelete(topic.id)}
                     title="Delete"
                     aria-label={`Delete ${topic.topicName}`}
-                  >🗑️</button>
+                  ><Trash2 size={16} /></button>
                 </div>
               </div>
 
@@ -185,7 +186,13 @@ function DsaTracker() {
                     fontWeight: 600,
                   }}
                 >
-                  {topic.progressPercentage === 100 ? '✅ Completed' : topic.progressPercentage > 0 ? '🔄 In Progress' : '⏳ Not Started'}
+                  {topic.progressPercentage === 100 ? (
+                    <><CheckCircle size={12} className="inline mr-1" /> Completed</>
+                  ) : topic.progressPercentage > 0 ? (
+                    <><RefreshCw size={12} className="inline mr-1" /> In Progress</>
+                  ) : (
+                    <><Hourglass size={12} className="inline mr-1" /> Not Started</>
+                  )}
                 </span>
               </div>
             </div>

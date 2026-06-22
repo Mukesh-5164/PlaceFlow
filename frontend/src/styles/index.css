@@ -10,21 +10,21 @@
    ============================================= */
 :root {
   /* Colors */
-  --bg-primary: #0a0e1a;
-  --bg-secondary: #111827;
-  --bg-card: #141b2d;
-  --bg-card-hover: #1a2236;
-  --bg-input: #1e2740;
-  --bg-sidebar: #0d1321;
+  --bg-primary: #06141B;
+  --bg-secondary: #11212D;
+  --bg-card: #11212D;
+  --bg-card-hover: #253745;
+  --bg-input: #253745;
+  --bg-sidebar: #06141B;
 
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-color-focus: rgba(99, 102, 241, 0.6);
+  --border-color: rgba(204, 208, 207, 0.1);
+  --border-color-focus: rgba(155, 168, 171, 0.6);
 
   /* Brand Colors */
-  --primary: #6366f1;
-  --primary-dark: #4f46e5;
-  --primary-light: #818cf8;
-  --primary-glow: rgba(99, 102, 241, 0.2);
+  --primary: #4A5C6A;
+  --primary-dark: #253745;
+  --primary-light: #9BA8AB;
+  --primary-glow: rgba(155, 168, 171, 0.2);
 
   --accent-cyan: #06b6d4;
   --accent-emerald: #10b981;
@@ -33,10 +33,10 @@
   --accent-violet: #8b5cf6;
 
   /* Text */
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-link: #6366f1;
+  --text-primary: #CCD0CF;
+  --text-secondary: #9BA8AB;
+  --text-muted: #4A5C6A;
+  --text-link: #9BA8AB;
 
   /* Status Colors */
   --status-applied: #3b82f6;

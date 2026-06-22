@@ -1,18 +1,22 @@
 import { NavLink } from 'react-router-dom'
 
+import { LayoutDashboard, Briefcase, Code2, CheckSquare, FileText, Rocket } from 'lucide-react'
+
 const navItems = [
-  { to: '/dashboard', icon: '🏠', label: 'Dashboard' },
-  { to: '/applications', icon: '📋', label: 'Applications' },
-  { to: '/dsa', icon: '💻', label: 'DSA Tracker' },
-  { to: '/tasks', icon: '✅', label: 'Study Tasks' },
-  { to: '/notes', icon: '📝', label: 'Notes' },
+  { to: '/dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
+  { to: '/applications', icon: <Briefcase size={20} />, label: 'Applications' },
+  { to: '/dsa', icon: <Code2 size={20} />, label: 'DSA Tracker' },
+  { to: '/tasks', icon: <CheckSquare size={20} />, label: 'Study Tasks' },
+  { to: '/notes', icon: <FileText size={20} />, label: 'Notes' },
 ]
 
 function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <div className="sidebar-logo-icon">🚀</div>
+        <div className="sidebar-logo-icon">
+          <Rocket size={20} color="white" />
+        </div>
         <div>
           <div className="sidebar-logo-text">PlaceFlow</div>
           <div className="sidebar-logo-sub">Placement Tracker</div>

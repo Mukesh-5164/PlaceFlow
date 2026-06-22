@@ -5,6 +5,7 @@ import { getTasks } from '../api/tasksApi'
 import { getDsaTopics } from '../api/dsaApi'
 import StatCard from '../components/StatCard'
 import Loader from '../components/Loader'
+import { FileStack, Clock, CheckCircle, Terminal, Trophy, Mic, Brain, BookOpen, Sparkles, Pin, Code2, Home } from 'lucide-react'
 
 function Dashboard() {
   const [stats, setStats] = useState(null)
@@ -72,7 +73,7 @@ function Dashboard() {
     <div className="page-container">
       <div className="page-header">
         <div>
-          <h1 className="page-title">Dashboard 🏠</h1>
+          <h1 className="page-title flex items-center gap-2">Dashboard <Home className="inline ml-2 text-primary" size={28} /></h1>
           <p className="page-subtitle">Your placement journey at a glance</p>
         </div>
       </div>
@@ -80,13 +81,13 @@ function Dashboard() {
       {/* Stats Grid */}
       <div className="stats-grid">
         <StatCard
-          icon="📋"
+          icon={<FileStack size={28} />}
           value={stats?.totalApplications ?? 0}
           label="Total Applications"
           gradient="linear-gradient(90deg, #6366f1, #8b5cf6)"
         />
         <StatCard
-          icon="⏰"
+          icon={<Clock size={28} />}
           value={stats?.upcomingDeadlines ?? 0}
           label="Upcoming Deadlines"
           gradient="linear-gradient(90deg, #f59e0b, #ef4444)"
@@ -94,19 +95,19 @@ function Dashboard() {
           changeType={stats?.upcomingDeadlines > 0 ? 'negative' : 'neutral'}
         />
         <StatCard
-          icon="✅"
+          icon={<CheckCircle size={28} />}
           value={stats?.pendingStudyTasks ?? 0}
           label="Pending Tasks"
           gradient="linear-gradient(90deg, #06b6d4, #6366f1)"
         />
         <StatCard
-          icon="💻"
+          icon={<Terminal size={28} />}
           value={`${stats?.averageDsaProgress ?? 0}%`}
           label="Avg DSA Progress"
           gradient="linear-gradient(90deg, #10b981, #06b6d4)"
         />
         <StatCard
-          icon="🎉"
+          icon={<Trophy size={28} />}
           value={stats?.selectedApplications ?? 0}
           label="Selected"
           gradient="linear-gradient(90deg, #10b981, #34d399)"
@@ -114,7 +115,7 @@ function Dashboard() {
           changeType={stats?.selectedApplications > 0 ? 'positive' : 'neutral'}
         />
         <StatCard
-          icon="🎤"
+          icon={<Mic size={28} />}
           value={stats?.interviewApplications ?? 0}
           label="In Interview Stage"
           gradient="linear-gradient(90deg, #8b5cf6, #a78bfa)"
@@ -126,12 +127,12 @@ function Dashboard() {
         {/* Upcoming Deadlines */}
         <div className="card">
           <div className="card-header">
-            <h2 className="card-title">⏰ Upcoming Deadlines</h2>
+            <h2 className="card-title flex items-center gap-2"><Clock size={18} className="inline mr-1" /> Upcoming Deadlines</h2>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Next 7 days</span>
           </div>
           {deadlines.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-state-icon">🎉</div>
+              <div className="empty-state-icon"><Trophy size={48} /></div>
               <div className="empty-state-text">No upcoming deadlines</div>
             </div>
           ) : (
@@ -150,19 +151,19 @@ function Dashboard() {
         {/* Pending Study Tasks */}
         <div className="card">
           <div className="card-header">
-            <h2 className="card-title">📚 Pending Study Tasks</h2>
+            <h2 className="card-title flex items-center gap-2"><BookOpen size={18} className="inline mr-1" /> Pending Study Tasks</h2>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Top 5</span>
           </div>
           {pendingTasks.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-state-icon">✨</div>
+              <div className="empty-state-icon"><Sparkles size={48} /></div>
               <div className="empty-state-text">All tasks completed!</div>
             </div>
           ) : (
             <div className="task-list">
               {pendingTasks.map(task => (
                 <div key={task.id} className="task-item">
-                  <span style={{ fontSize: '1rem' }}>📌</span>
+                  <span style={{ fontSize: '1rem' }}><Pin size={16} /></span>
                   <div className="task-name">{task.taskName}</div>
                   {task.dueDate && (
                     <div className="task-due">{formatDate(task.dueDate)}</div>
@@ -176,14 +177,14 @@ function Dashboard() {
         {/* DSA Progress Summary */}
         <div className="card" style={{ gridColumn: '1 / -1' }}>
           <div className="card-header">
-            <h2 className="card-title">💻 DSA Progress Summary</h2>
+            <h2 className="card-title flex items-center gap-2"><Code2 size={18} className="inline mr-1" /> DSA Progress Summary</h2>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
               Avg: {stats?.averageDsaProgress ?? 0}%
             </span>
           </div>
           {dsaTopics.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-state-icon">🧠</div>
+              <div className="empty-state-icon"><Brain size={48} /></div>
               <div className="empty-state-text">Start tracking your DSA progress!</div>
             </div>
           ) : (

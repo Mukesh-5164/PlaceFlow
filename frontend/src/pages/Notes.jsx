@@ -7,6 +7,7 @@ import {
 } from '../api/notesApi'
 import Modal from '../components/Modal'
 import Loader from '../components/Loader'
+import { FileText, Book, Edit2, Trash2, Clock } from 'lucide-react'
 
 const EMPTY_FORM = { title: '', content: '' }
 
@@ -112,7 +113,7 @@ function Notes() {
     <div className="page-container">
       <div className="page-header">
         <div>
-          <h1 className="page-title">Notes 📝</h1>
+          <h1 className="page-title flex items-center gap-2">Notes <FileText size={28} className="inline ml-2 text-primary" /></h1>
           <p className="page-subtitle">Capture your ideas, interview notes, and references</p>
         </div>
         <button id="add-note-btn" className="btn btn-primary" onClick={openCreate}>
@@ -139,7 +140,7 @@ function Notes() {
         <Loader message="Loading notes..." />
       ) : filteredNotes.length === 0 ? (
         <div className="empty-state" style={{ marginTop: '48px' }}>
-          <div className="empty-state-icon">📓</div>
+          <div className="empty-state-icon"><Book size={48} /></div>
           <div className="empty-state-text">
             {search ? 'No notes match your search.' : 'No notes yet.\nCreate your first note!'}
           </div>
@@ -161,13 +162,13 @@ function Notes() {
                     onClick={(e) => { e.stopPropagation(); openEdit(note) }}
                     title="Edit"
                     aria-label={`Edit note ${note.title}`}
-                  >✏️</button>
+                  ><Edit2 size={16} /></button>
                   <button
                     className="btn-icon danger"
                     onClick={(e) => { e.stopPropagation(); handleDelete(note.id) }}
                     title="Delete"
                     aria-label={`Delete note ${note.title}`}
-                  >🗑️</button>
+                  ><Trash2 size={16} /></button>
                 </div>
               </div>
 
@@ -176,7 +177,7 @@ function Notes() {
               )}
 
               <div className="note-card-date">
-                🕐 {formatDateTime(note.createdAt)}
+                <Clock size={12} className="inline mr-1" /> {formatDateTime(note.createdAt)}
               </div>
             </div>
           ))}
@@ -201,7 +202,7 @@ function Notes() {
               className="btn btn-secondary btn-sm"
               onClick={() => { setViewingNote(null); openEdit(viewingNote) }}
             >
-              ✏️ Edit
+              <Edit2 size={14} className="inline mr-1" /> Edit
             </button>
             <button
               className="btn btn-secondary btn-sm"

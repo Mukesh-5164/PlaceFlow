@@ -7,6 +7,7 @@ import {
 } from '../api/applicationsApi'
 import Modal from '../components/Modal'
 import Loader from '../components/Loader'
+import { Briefcase, Inbox, Edit2, Trash2 } from 'lucide-react'
 
 const STATUS_OPTIONS = ['Applied', 'Online_Assessment', 'Interview', 'Rejected', 'Selected']
 
@@ -121,7 +122,7 @@ function Applications() {
     <div className="page-container">
       <div className="page-header">
         <div>
-          <h1 className="page-title">Applications 📋</h1>
+          <h1 className="page-title flex items-center gap-2">Applications <Briefcase size={28} className="inline ml-2 text-primary" /></h1>
           <p className="page-subtitle">Track your job and internship applications</p>
         </div>
         <button id="add-application-btn" className="btn btn-primary" onClick={openCreate}>
@@ -152,7 +153,7 @@ function Applications() {
         <Loader message="Loading applications..." />
       ) : applications.length === 0 ? (
         <div className="empty-state" style={{ marginTop: '48px' }}>
-          <div className="empty-state-icon">📭</div>
+          <div className="empty-state-icon"><Inbox size={48} /></div>
           <div className="empty-state-text">No applications found.<br />Click "Add Application" to get started!</div>
         </div>
       ) : (
@@ -193,13 +194,13 @@ function Applications() {
                         onClick={() => openEdit(app)}
                         title="Edit"
                         aria-label={`Edit ${app.companyName}`}
-                      >✏️</button>
+                      ><Edit2 size={16} /></button>
                       <button
                         className="btn-icon danger"
                         onClick={() => handleDelete(app.id)}
                         title="Delete"
                         aria-label={`Delete ${app.companyName}`}
-                      >🗑️</button>
+                      ><Trash2 size={16} /></button>
                     </div>
                   </td>
                 </tr>
