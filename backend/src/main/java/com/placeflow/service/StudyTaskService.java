@@ -19,24 +19,25 @@ public class StudyTaskService {
         this.studyTaskRepository = studyTaskRepository;
     }
 
-    public List<StudyTaskDTO> getAllTasks() {
-        return studyTaskRepository.findAll()
+    public List<StudyTaskDTO> getAllTasks(Long userId) {
+        return studyTaskRepository.findAllByUserId(userId)
                 .stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    public StudyTaskDTO getTaskById(Long id) {
-        StudyTask task = studyTaskRepository.findById(id)
+    public StudyTaskDTO getTaskById(Long id, Long userId) {
+        StudyTask task = studyTaskRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Study Task", "id", id));
         return toDTO(task);
     }
 
-    public StudyTaskDTO createTask(StudyTaskDTO dto) {
+    public StudyTaskDTO createTask(StudyTaskDTO dto, Long userId) {
         StudyTask task = toEntity(dto);
+        task.setUserId(userId);
         return toDTO(studyTaskRepository.save(task));
     }
 
-    public StudyTaskDTO updateTask(Long id, StudyTaskDTO dto) {
-        StudyTask existing = studyTaskRepository.findById(id)
+    public StudyTaskDTO updateTask(Long id, StudyTaskDTO dto, Long userId) {
+        StudyTask existing = studyTaskRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Study Task", "id", id));
 
         existing.setTaskName(dto.getTaskName());
@@ -46,15 +47,14 @@ public class StudyTaskService {
         return toDTO(studyTaskRepository.save(existing));
     }
 
-    public void deleteTask(Long id) {
-        if (!studyTaskRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Study Task", "id", id);
-        }
+    public void deleteTask(Long id, Long userId) {
+        studyTaskRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Study Task", "id", id));
         studyTaskRepository.deleteById(id);
     }
 
-    public long countPendingTasks() {
-        return studyTaskRepository.countByStatus(TaskStatus.Pending);
+    public long countPendingTasks(Long userId) {
+        return studyTaskRepository.countByUserIdAndStatus(userId, TaskStatus.Pending);
     }
 
     private StudyTaskDTO toDTO(StudyTask task) {

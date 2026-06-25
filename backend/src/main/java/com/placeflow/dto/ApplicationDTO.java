@@ -4,6 +4,7 @@ import com.placeflow.entity.Application.ApplicationStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ApplicationDTO {
 
@@ -15,6 +16,8 @@ public class ApplicationDTO {
     @NotBlank(message = "Role is required")
     private String role;
 
+    private String location;
+
     @NotNull(message = "Applied date is required")
     private LocalDate appliedDate;
 
@@ -23,19 +26,12 @@ public class ApplicationDTO {
     @NotNull(message = "Status is required")
     private ApplicationStatus status;
 
-    private String location;
+    private Long createdBy;
+    private Long updatedBy;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public ApplicationDTO() {}
-
-    public ApplicationDTO(Long id, String companyName, String role, LocalDate appliedDate, LocalDate deadline, ApplicationStatus status, String location) {
-        this.id = id;
-        this.companyName = companyName;
-        this.role = role;
-        this.appliedDate = appliedDate;
-        this.deadline = deadline;
-        this.status = status;
-        this.location = location;
-    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -46,6 +42,9 @@ public class ApplicationDTO {
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
 
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
+
     public LocalDate getAppliedDate() { return appliedDate; }
     public void setAppliedDate(LocalDate appliedDate) { this.appliedDate = appliedDate; }
 
@@ -55,6 +54,15 @@ public class ApplicationDTO {
     public ApplicationStatus getStatus() { return status; }
     public void setStatus(ApplicationStatus status) { this.status = status; }
 
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
+    public Long getCreatedBy() { return createdBy; }
+    public void setCreatedBy(Long createdBy) { this.createdBy = createdBy; }
+
+    public Long getUpdatedBy() { return updatedBy; }
+    public void setUpdatedBy(Long updatedBy) { this.updatedBy = updatedBy; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

@@ -7,24 +7,25 @@ import {
 } from '../api/applicationsApi'
 import Modal from '../components/Modal'
 import Loader from '../components/Loader'
-import { Briefcase, Inbox, Edit2, Trash2 } from 'lucide-react'
 
-const STATUS_OPTIONS = ['Applied', 'Online_Assessment', 'Interview', 'Rejected', 'Selected']
+const STATUS_OPTIONS = ['Applied', 'OA_Cleared', 'Interview_Scheduled', 'HR_Round', 'Selected', 'Rejected']
 
 const STATUS_LABELS = {
-  Applied: 'Applied',
-  Online_Assessment: 'OA',
-  Interview: 'Interview',
-  Rejected: 'Rejected',
-  Selected: 'Selected',
+  Applied:             '📩 Applied',
+  OA_Cleared:          '✅ OA Cleared',
+  Interview_Scheduled: '🎤 Interview',
+  HR_Round:            '🤝 HR Round',
+  Selected:            '🎉 Selected',
+  Rejected:            '❌ Rejected',
 }
 
 const STATUS_BADGE_CLASS = {
-  Applied: 'badge-applied',
-  Online_Assessment: 'badge-oa',
-  Interview: 'badge-interview',
-  Rejected: 'badge-rejected',
-  Selected: 'badge-selected',
+  Applied:             'badge-applied',
+  OA_Cleared:          'badge-oa',
+  Interview_Scheduled: 'badge-interview',
+  HR_Round:            'badge-interview',
+  Selected:            'badge-selected',
+  Rejected:            'badge-rejected',
 }
 
 const EMPTY_FORM = {
@@ -122,7 +123,7 @@ function Applications() {
     <div className="page-container">
       <div className="page-header">
         <div>
-          <h1 className="page-title flex items-center gap-2">Applications <Briefcase size={28} className="inline ml-2 text-primary" /></h1>
+          <h1 className="page-title">Applications 📋</h1>
           <p className="page-subtitle">Track your job and internship applications</p>
         </div>
         <button id="add-application-btn" className="btn btn-primary" onClick={openCreate}>
@@ -153,7 +154,7 @@ function Applications() {
         <Loader message="Loading applications..." />
       ) : applications.length === 0 ? (
         <div className="empty-state" style={{ marginTop: '48px' }}>
-          <div className="empty-state-icon"><Inbox size={48} /></div>
+          <div className="empty-state-icon">📭</div>
           <div className="empty-state-text">No applications found.<br />Click "Add Application" to get started!</div>
         </div>
       ) : (
@@ -194,13 +195,13 @@ function Applications() {
                         onClick={() => openEdit(app)}
                         title="Edit"
                         aria-label={`Edit ${app.companyName}`}
-                      ><Edit2 size={16} /></button>
+                      >✏️</button>
                       <button
                         className="btn-icon danger"
                         onClick={() => handleDelete(app.id)}
                         title="Delete"
                         aria-label={`Delete ${app.companyName}`}
-                      ><Trash2 size={16} /></button>
+                      >🗑️</button>
                     </div>
                   </td>
                 </tr>

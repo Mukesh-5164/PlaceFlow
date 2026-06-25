@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://placeflow-0q2u.onrender.com/api'
+const BASE_URL = '/api'
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -9,10 +9,29 @@ const api = axios.create({
   },
 })
 
-// Response interceptor for error handling
+// ── Request interceptor: attach JWT Bearer token ──────────────────────────
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('placeflow_token')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => Promise.reject(error)
+)
+
+// ── Response interceptor: handle errors ──────────────────────────────────
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Auto-logout on 401 Unauthorized (token expired or invalid)
+    if (error.response?.status === 401) {
+      localStorage.removeItem('placeflow_token')
+      localStorage.removeItem('placeflow_user')
+      window.location.href = '/login'
+    }
+
     const message =
       error.response?.data?.message ||
       error.response?.data?.error ||

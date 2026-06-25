@@ -2,12 +2,12 @@ package com.placeflow.controller;
 
 import com.placeflow.dto.DsaTrackerDTO;
 import com.placeflow.service.DsaTrackerService;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/dsa")
@@ -20,32 +20,48 @@ public class DsaTrackerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DsaTrackerDTO>> getAllTopics() {
-        return ResponseEntity.ok(dsaTrackerService.getAllTopics());
+    public ResponseEntity<List<DsaTrackerDTO>> getAllTopics(Authentication auth) {
+        Long userId = (Long) auth.getCredentials();
+        return ResponseEntity.ok(dsaTrackerService.getAllTopics(userId));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DsaTrackerDTO> getTopicById(@PathVariable Long id) {
-        return ResponseEntity.ok(dsaTrackerService.getTopicById(id));
+    public ResponseEntity<DsaTrackerDTO> getTopicById(@PathVariable Long id, Authentication auth) {
+        Long userId = (Long) auth.getCredentials();
+        return ResponseEntity.ok(dsaTrackerService.getTopicById(id, userId));
     }
 
     @PostMapping
-    public ResponseEntity<DsaTrackerDTO> createTopic(
-            @Valid @RequestBody DsaTrackerDTO dto) {
-        DsaTrackerDTO created = dsaTrackerService.createTopic(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    public ResponseEntity<DsaTrackerDTO> createTopic(@RequestBody DsaTrackerDTO dto, Authentication auth) {
+        Long userId = (Long) auth.getCredentials();
+        return ResponseEntity.ok(dsaTrackerService.createTopic(dto, userId));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DsaTrackerDTO> updateTopic(
-            @PathVariable Long id,
-            @Valid @RequestBody DsaTrackerDTO dto) {
-        return ResponseEntity.ok(dsaTrackerService.updateTopic(id, dto));
+    public ResponseEntity<DsaTrackerDTO> updateTopic(@PathVariable Long id,
+                                                       @RequestBody DsaTrackerDTO dto,
+                                                       Authentication auth) {
+        Long userId = (Long) auth.getCredentials();
+        return ResponseEntity.ok(dsaTrackerService.updateTopic(id, dto, userId));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTopic(@PathVariable Long id) {
-        dsaTrackerService.deleteTopic(id);
+    public ResponseEntity<?> deleteTopic(@PathVariable Long id, Authentication auth) {
+        Long userId = (Long) auth.getCredentials();
+        dsaTrackerService.deleteTopic(id, userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<Map<String, Object>> getDsaStats(Authentication auth) {
+        Long userId = (Long) auth.getCredentials();
+        double avg = dsaTrackerService.getAverageProgressByUser(userId);
+        long totalSolved = dsaTrackerService.getTotalSolvedByUser(userId);
+        long completedTopics = dsaTrackerService.getCompletedTopicsCountByUser(userId);
+        return ResponseEntity.ok(Map.of(
+            "averageProgress", avg,
+            "totalQuestionsSolved", totalSolved,
+            "completedTopics", completedTopics
+        ));
     }
 }

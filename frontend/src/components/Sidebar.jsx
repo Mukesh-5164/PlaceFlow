@@ -1,26 +1,46 @@
-import { NavLink } from 'react-router-dom'
-
-import { LayoutDashboard, Briefcase, Code2, CheckSquare, FileText, Rocket } from 'lucide-react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+import NotificationBell from './NotificationBell'
+import DarkModeToggle from './DarkModeToggle'
+import { useState } from 'react'
 
 const navItems = [
-  { to: '/dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
-  { to: '/applications', icon: <Briefcase size={20} />, label: 'Applications' },
-  { to: '/dsa', icon: <Code2 size={20} />, label: 'DSA Tracker' },
-  { to: '/tasks', icon: <CheckSquare size={20} />, label: 'Study Tasks' },
-  { to: '/notes', icon: <FileText size={20} />, label: 'Notes' },
+  { to: '/dashboard',  icon: '🏠', label: 'Dashboard' },
+  { to: '/applications', icon: '📋', label: 'Applications' },
+  { to: '/dsa',        icon: '💻', label: 'DSA Tracker' },
+  { to: '/subjects',   icon: '📚', label: 'Core Subjects' },
+  { to: '/tasks',      icon: '✅', label: 'Study Tasks' },
+  { to: '/reports',    icon: '📝', label: 'Daily Reports' },
+  { to: '/leetcode',   icon: '💡', label: 'LeetCode' },
+  { to: '/notes',      icon: '🗒️', label: 'Notes' },
 ]
 
 function Sidebar() {
-  return (
-    <aside className="sidebar">
+  const { user, logout, isAdmin } = useAuth()
+  const navigate = useNavigate()
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
+
+  const getInitials = (name) => name ? name.slice(0, 2).toUpperCase() : '??'
+
+  const SidebarContent = () => (
+    <aside className="sidebar" style={mobileOpen ? { transform: 'translateX(0)' } : {}}>
       <div className="sidebar-logo">
-        <div className="sidebar-logo-icon">
-          <Rocket size={20} color="white" />
-        </div>
+        <div className="sidebar-logo-icon">🚀</div>
         <div>
           <div className="sidebar-logo-text">PlaceFlow</div>
-          <div className="sidebar-logo-sub">Placement Tracker</div>
+          <div className="sidebar-logo-sub">Placement Management</div>
         </div>
+      </div>
+
+      {/* Top actions */}
+      <div style={{ display: 'flex', gap: 8, padding: '0 12px 12px', justifyContent: 'flex-end' }}>
+        <NotificationBell />
+        <DarkModeToggle />
       </div>
 
       <nav className="sidebar-nav">
@@ -30,19 +50,70 @@ function Sidebar() {
             key={item.to}
             to={item.to}
             className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            onClick={() => setMobileOpen(false)}
           >
             <span className="nav-icon">{item.icon}</span>
             <span className="nav-label">{item.label}</span>
           </NavLink>
         ))}
+
+        {isAdmin && isAdmin() && (
+          <>
+            <div className="sidebar-section-label" style={{ marginTop: 16 }}>Admin</div>
+            <NavLink to="/admin" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+                     onClick={() => setMobileOpen(false)}>
+              <span className="nav-icon">⚙️</span>
+              <span className="nav-label">Admin Dashboard</span>
+            </NavLink>
+          </>
+        )}
       </nav>
 
-      <div className="sidebar-footer">
-        <div className="sidebar-footer-text">
-          PlaceFlow v1.0.0 &nbsp;•&nbsp; Built for Students
+      {user && (
+        <div className="sidebar-user">
+          <NavLink to="/profile" className="sidebar-user-info" style={{ textDecoration: 'none' }}>
+            <div className="sidebar-avatar">{getInitials(user.username)}</div>
+            <div className="sidebar-user-details">
+              <div className="sidebar-username">{user.username}</div>
+              <div className={`sidebar-role-badge ${user.role === 'ADMIN' ? 'admin' : 'user'}`}>
+                {user.role === 'ADMIN' ? '🔴 Admin' : '🔵 User'}
+              </div>
+            </div>
+          </NavLink>
+          <button id="logout-btn" className="sidebar-logout-btn" onClick={handleLogout} title="Logout">🚪</button>
         </div>
+      )}
+
+      <div className="sidebar-footer">
+        <div className="sidebar-footer-text">PlaceFlow v2.0.0 · Enterprise Edition</div>
       </div>
     </aside>
+  )
+
+  return (
+    <>
+      {/* Mobile hamburger */}
+      <button
+        className="mobile-menu-btn"
+        onClick={() => setMobileOpen(o => !o)}
+        style={{
+          display: 'none', // shown via CSS on mobile
+          position: 'fixed', top: 12, left: 12, zIndex: 1001,
+          background: 'var(--card-bg)', border: '1px solid var(--border)',
+          borderRadius: 8, padding: '8px 10px', cursor: 'pointer', fontSize: '1.2rem',
+        }}
+      >
+        {mobileOpen ? '✕' : '☰'}
+      </button>
+
+      {/* Overlay for mobile */}
+      {mobileOpen && (
+        <div onClick={() => setMobileOpen(false)}
+             style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 999 }} />
+      )}
+
+      <SidebarContent />
+    </>
   )
 }
 

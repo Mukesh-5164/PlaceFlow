@@ -1,7 +1,10 @@
 package com.placeflow.dto;
 
+import java.util.List;
+
 public class DashboardStatsDTO {
 
+    // Existing
     private long totalApplications;
     private long upcomingDeadlines;
     private long pendingStudyTasks;
@@ -10,9 +13,22 @@ public class DashboardStatsDTO {
     private long rejectedApplications;
     private long interviewApplications;
 
+    // New
+    private long totalDailyReports;
+    private double totalStudyHoursThisWeek;
+    private int studyStreak; // consecutive days with a report
+    private int dsaTopicsSolved; // topics at 100%
+    private long totalDsaQuestionsSolved;
+    private List<SubjectProgressDTO> subjectProgress;
+    private long unreadNotifications;
+
     public DashboardStatsDTO() {}
 
-    public DashboardStatsDTO(long totalApplications, long upcomingDeadlines, long pendingStudyTasks, double averageDsaProgress, long selectedApplications, long rejectedApplications, long interviewApplications) {
+    // ── Full constructor ──────────────────────────────────────────────────────
+
+    public DashboardStatsDTO(long totalApplications, long upcomingDeadlines, long pendingStudyTasks,
+                              double averageDsaProgress, long selectedApplications,
+                              long rejectedApplications, long interviewApplications) {
         this.totalApplications = totalApplications;
         this.upcomingDeadlines = upcomingDeadlines;
         this.pendingStudyTasks = pendingStudyTasks;
@@ -21,6 +37,8 @@ public class DashboardStatsDTO {
         this.rejectedApplications = rejectedApplications;
         this.interviewApplications = interviewApplications;
     }
+
+    // ── Getters & Setters ────────────────────────────────────────────────────
 
     public long getTotalApplications() { return totalApplications; }
     public void setTotalApplications(long totalApplications) { this.totalApplications = totalApplications; }
@@ -42,4 +60,25 @@ public class DashboardStatsDTO {
 
     public long getInterviewApplications() { return interviewApplications; }
     public void setInterviewApplications(long interviewApplications) { this.interviewApplications = interviewApplications; }
+
+    public long getTotalDailyReports() { return totalDailyReports; }
+    public void setTotalDailyReports(long totalDailyReports) { this.totalDailyReports = totalDailyReports; }
+
+    public double getTotalStudyHoursThisWeek() { return totalStudyHoursThisWeek; }
+    public void setTotalStudyHoursThisWeek(double totalStudyHoursThisWeek) { this.totalStudyHoursThisWeek = totalStudyHoursThisWeek; }
+
+    public int getStudyStreak() { return studyStreak; }
+    public void setStudyStreak(int studyStreak) { this.studyStreak = studyStreak; }
+
+    public int getDsaTopicsSolved() { return dsaTopicsSolved; }
+    public void setDsaTopicsSolved(int dsaTopicsSolved) { this.dsaTopicsSolved = dsaTopicsSolved; }
+
+    public long getTotalDsaQuestionsSolved() { return totalDsaQuestionsSolved; }
+    public void setTotalDsaQuestionsSolved(long totalDsaQuestionsSolved) { this.totalDsaQuestionsSolved = totalDsaQuestionsSolved; }
+
+    public List<SubjectProgressDTO> getSubjectProgress() { return subjectProgress; }
+    public void setSubjectProgress(List<SubjectProgressDTO> subjectProgress) { this.subjectProgress = subjectProgress; }
+
+    public long getUnreadNotifications() { return unreadNotifications; }
+    public void setUnreadNotifications(long unreadNotifications) { this.unreadNotifications = unreadNotifications; }
 }

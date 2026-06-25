@@ -18,24 +18,25 @@ public class NoteService {
         this.noteRepository = noteRepository;
     }
 
-    public List<NoteDTO> getAllNotes() {
-        return noteRepository.findAllByOrderByCreatedAtDesc()
+    public List<NoteDTO> getAllNotes(Long userId) {
+        return noteRepository.findAllByUserIdOrderByCreatedAtDesc(userId)
                 .stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    public NoteDTO getNoteById(Long id) {
-        Note note = noteRepository.findById(id)
+    public NoteDTO getNoteById(Long id, Long userId) {
+        Note note = noteRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Note", "id", id));
         return toDTO(note);
     }
 
-    public NoteDTO createNote(NoteDTO dto) {
+    public NoteDTO createNote(NoteDTO dto, Long userId) {
         Note note = toEntity(dto);
+        note.setUserId(userId);
         return toDTO(noteRepository.save(note));
     }
 
-    public NoteDTO updateNote(Long id, NoteDTO dto) {
-        Note existing = noteRepository.findById(id)
+    public NoteDTO updateNote(Long id, NoteDTO dto, Long userId) {
+        Note existing = noteRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Note", "id", id));
 
         existing.setTitle(dto.getTitle());
@@ -44,10 +45,9 @@ public class NoteService {
         return toDTO(noteRepository.save(existing));
     }
 
-    public void deleteNote(Long id) {
-        if (!noteRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Note", "id", id);
-        }
+    public void deleteNote(Long id, Long userId) {
+        noteRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Note", "id", id));
         noteRepository.deleteById(id);
     }
 

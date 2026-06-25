@@ -7,7 +7,6 @@ import {
 } from '../api/tasksApi'
 import Modal from '../components/Modal'
 import Loader from '../components/Loader'
-import { CheckSquare, Hourglass, RefreshCw, CheckCircle, FileText, Edit2, Trash2 } from 'lucide-react'
 
 const STATUS_OPTIONS = ['Pending', 'In_Progress', 'Completed']
 
@@ -136,7 +135,7 @@ function StudyTasks() {
     <div className="page-container">
       <div className="page-header">
         <div>
-          <h1 className="page-title flex items-center gap-2">Study Tasks <CheckSquare size={28} className="inline ml-2 text-primary" /></h1>
+          <h1 className="page-title">Study Tasks ✅</h1>
           <p className="page-subtitle">Manage your preparation to-do list</p>
         </div>
         <button id="add-task-btn" className="btn btn-primary" onClick={openCreate}>
@@ -147,9 +146,9 @@ function StudyTasks() {
       {/* Summary mini-cards */}
       <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
         {[
-          { key: 'Pending', color: '#f59e0b', bg: 'rgba(245,158,11,0.1)', icon: <Hourglass size={18} /> },
-          { key: 'In_Progress', color: '#818cf8', bg: 'rgba(99,102,241,0.1)', icon: <RefreshCw size={18} /> },
-          { key: 'Completed', color: '#34d399', bg: 'rgba(16,185,129,0.1)', icon: <CheckCircle size={18} /> },
+          { key: 'Pending', color: '#f59e0b', bg: 'rgba(245,158,11,0.1)', icon: '⏳' },
+          { key: 'In_Progress', color: '#818cf8', bg: 'rgba(99,102,241,0.1)', icon: '🔄' },
+          { key: 'Completed', color: '#34d399', bg: 'rgba(16,185,129,0.1)', icon: '✅' },
         ].map(({ key, color, bg, icon }) => (
           <div
             key={key}
@@ -190,7 +189,7 @@ function StudyTasks() {
         <Loader message="Loading tasks..." />
       ) : filteredTasks.length === 0 ? (
         <div className="empty-state" style={{ marginTop: '48px' }}>
-          <div className="empty-state-icon"><FileText size={48} /></div>
+          <div className="empty-state-icon">📝</div>
           <div className="empty-state-text">No tasks found.<br />Add your first study task!</div>
         </div>
       ) : (
@@ -246,13 +245,13 @@ function StudyTasks() {
                   onClick={() => openEdit(task)}
                   title="Edit"
                   aria-label={`Edit task ${task.taskName}`}
-                ><Edit2 size={16} /></button>
+                >✏️</button>
                 <button
                   className="btn-icon danger"
                   onClick={() => handleDelete(task.id)}
                   title="Delete"
                   aria-label={`Delete task ${task.taskName}`}
-                ><Trash2 size={16} /></button>
+                >🗑️</button>
               </div>
             </div>
           ))}

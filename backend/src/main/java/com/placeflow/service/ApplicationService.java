@@ -7,6 +7,7 @@ import com.placeflow.exception.ResourceNotFoundException;
 import com.placeflow.repository.ApplicationRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,30 +20,33 @@ public class ApplicationService {
         this.applicationRepository = applicationRepository;
     }
 
-    public List<ApplicationDTO> getAllApplications(String status) {
+    public List<ApplicationDTO> getAllApplications(Long userId, String status) {
         List<Application> applications;
         if (status != null && !status.isBlank()) {
             ApplicationStatus appStatus = ApplicationStatus.valueOf(status);
-            applications = applicationRepository.findByStatus(appStatus);
+            applications = applicationRepository.findByUserIdAndStatus(userId, appStatus);
         } else {
-            applications = applicationRepository.findAll();
+            applications = applicationRepository.findAllByUserId(userId);
         }
         return applications.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    public ApplicationDTO getApplicationById(Long id) {
-        Application app = applicationRepository.findById(id)
+    public ApplicationDTO getApplicationById(Long id, Long userId) {
+        Application app = applicationRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Application", "id", id));
         return toDTO(app);
     }
 
-    public ApplicationDTO createApplication(ApplicationDTO dto) {
+    public ApplicationDTO createApplication(ApplicationDTO dto, Long userId) {
         Application app = toEntity(dto);
+        app.setUserId(userId);
+        app.setCreatedBy(userId);
+        app.setUpdatedBy(userId);
         return toDTO(applicationRepository.save(app));
     }
 
-    public ApplicationDTO updateApplication(Long id, ApplicationDTO dto) {
-        Application existing = applicationRepository.findById(id)
+    public ApplicationDTO updateApplication(Long id, ApplicationDTO dto, Long userId) {
+        Application existing = applicationRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Application", "id", id));
 
         existing.setCompanyName(dto.getCompanyName());
@@ -51,15 +55,33 @@ public class ApplicationService {
         existing.setDeadline(dto.getDeadline());
         existing.setStatus(dto.getStatus());
         existing.setLocation(dto.getLocation());
+        existing.setUpdatedBy(userId);
 
         return toDTO(applicationRepository.save(existing));
     }
 
-    public void deleteApplication(Long id) {
-        if (!applicationRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Application", "id", id);
-        }
+    public void deleteApplication(Long id, Long userId) {
+        applicationRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Application", "id", id));
         applicationRepository.deleteById(id);
+    }
+
+    public long getUpcomingDeadlines(Long userId) {
+        return applicationRepository
+                .findByUserIdAndDeadlineBetween(userId, LocalDate.now(), LocalDate.now().plusDays(7))
+                .size();
+    }
+
+    public long getSelectedCount(Long userId) {
+        return applicationRepository.countByUserIdAndStatus(userId, ApplicationStatus.Selected);
+    }
+
+    public long getRejectedCount(Long userId) {
+        return applicationRepository.countByUserIdAndStatus(userId, ApplicationStatus.Rejected);
+    }
+
+    public long getInterviewCount(Long userId) {
+        return applicationRepository.countByUserIdAndStatus(userId, ApplicationStatus.Interview_Scheduled);
     }
 
     private ApplicationDTO toDTO(Application app) {
@@ -71,6 +93,10 @@ public class ApplicationService {
         dto.setDeadline(app.getDeadline());
         dto.setStatus(app.getStatus());
         dto.setLocation(app.getLocation());
+        dto.setCreatedBy(app.getCreatedBy());
+        dto.setUpdatedBy(app.getUpdatedBy());
+        dto.setCreatedAt(app.getCreatedAt());
+        dto.setUpdatedAt(app.getUpdatedAt());
         return dto;
     }
 
