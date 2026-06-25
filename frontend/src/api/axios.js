@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = '/api'
+const BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -25,8 +25,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Auto-logout on 401 Unauthorized (token expired or invalid)
-    if (error.response?.status === 401) {
+    // Auto-logout on 401 Unauthorized or 403 Forbidden (token expired or invalid)
+    if ((error.response?.status === 401 || error.response?.status === 403) && window.location.pathname !== '/login') {
       localStorage.removeItem('placeflow_token')
       localStorage.removeItem('placeflow_user')
       window.location.href = '/login'
