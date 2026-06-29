@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// test git
 @RestController
 @RequestMapping("/api/admin")
 @PreAuthorize("hasRole('ADMIN')")
@@ -28,13 +29,13 @@ public class AdminController {
     private final SubjectProgressService subjectProgressService;
 
     public AdminController(UserRepository userRepository,
-                           ApplicationRepository applicationRepository,
-                           DsaTrackerRepository dsaTrackerRepository,
-                           StudyTaskRepository studyTaskRepository,
-                           NoteRepository noteRepository,
-                           DailyReportRepository dailyReportRepository,
-                           DailyReportService dailyReportService,
-                           SubjectProgressService subjectProgressService) {
+            ApplicationRepository applicationRepository,
+            DsaTrackerRepository dsaTrackerRepository,
+            StudyTaskRepository studyTaskRepository,
+            NoteRepository noteRepository,
+            DailyReportRepository dailyReportRepository,
+            DailyReportService dailyReportService,
+            SubjectProgressService subjectProgressService) {
         this.userRepository = userRepository;
         this.applicationRepository = applicationRepository;
         this.dsaTrackerRepository = dsaTrackerRepository;
@@ -121,7 +122,7 @@ public class AdminController {
 
         // Sort by report count descending (most active first)
         userActivity.sort((a, b) -> Long.compare(
-            (Long) b.get("reportCount"), (Long) a.get("reportCount")));
+                (Long) b.get("reportCount"), (Long) a.get("reportCount")));
 
         Map<String, Object> analytics = new HashMap<>();
         analytics.put("userActivity", userActivity);
@@ -160,7 +161,7 @@ public class AdminController {
         return userRepository.findById(id).map(user -> {
             if (user.getRole() == User.Role.ADMIN) {
                 return ResponseEntity.badRequest().body(
-                    Map.of("message", "Cannot disable an admin user"));
+                        Map.of("message", "Cannot disable an admin user"));
             }
             user.setEnabled(false);
             userRepository.save(user);
