@@ -1,9 +1,6 @@
 # Ignore compiled Java/Kotlin classes and build directories
-**/target/
 **/build/
 *.class
-*.jar
-*.war
 *.ear
 
 # IDE files
