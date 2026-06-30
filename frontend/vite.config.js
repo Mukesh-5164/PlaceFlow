@@ -7,7 +7,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:8081',
+        target: 'https://placeflow-0q2u.onrender.com',
         changeOrigin: true,
       },
     },
